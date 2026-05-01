@@ -1,33 +1,26 @@
+// src/app/layout.tsx
 import type { Metadata } from "next";
-import { Geist, Geist_Mono } from "next/font/google";
 import "../styles/main.scss";
-import NavBar from "@/components/NavBar/NavBar";
-
-const geistSans = Geist({
-  variable: "--font-geist-sans",
-  subsets: ["latin"],
-});
-
-const geistMono = Geist_Mono({
-  variable: "--font-geist-mono",
-  subsets: ["latin"],
-});
+import Navbar from "@/components/NavBar/NavBar";   // Ajusta la ruta exacta de tu Navbar
+import ThemeProvider from "@/providers/ThemeProvider";
 
 export const metadata: Metadata = {
-  title: "Biblioteca UCB",
+  title: "Biblioteca Inteligente",
   description: "Explora libros digitales",
 };
 
 export default function RootLayout({
   children,
-}: Readonly<{
+}: {
   children: React.ReactNode;
-}>) {
+}) {
   return (
-    <html lang="en" className={`${geistSans.variable} ${geistMono.variable}`}>
+    <html lang="es" suppressHydrationWarning>
       <body>
-        <NavBar />
-        {children}
+        <ThemeProvider>
+          <Navbar />
+          <main className="main-content">{children}</main>
+        </ThemeProvider>
       </body>
     </html>
   );

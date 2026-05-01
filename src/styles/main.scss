@@ -18,6 +18,8 @@
   --button-bg: #f0f0f0;
   --button-hover: #e2e2e2;
   --shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+  --navbar-bg: #1e3a8a;      // azul oscuro para modo claro
+  --navbar-text: #ffffff;
 }
 
 /* Modo oscuro: se activa con la clase .dark en <html> */
@@ -34,6 +36,8 @@ html.dark {
   --button-bg: #2a2a2a;
   --button-hover: #3a3a3a;
   --shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+  --navbar-bg: #1e40af;      // azul más brillante para modo oscuro (opcional)
+  --navbar-text: #f0f0f0;
 }
 
 /* ===== RESET Y ESTILOS BASE ===== */

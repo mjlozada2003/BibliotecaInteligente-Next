@@ -4,10 +4,12 @@ import { useState } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import styles from "./NavBar.module.scss";
+import { useTheme } from "@/providers/ThemeProvider";
 
 const NavBar = () => {
   const [open, setOpen] = useState(false);
   const pathname = usePathname();
+  const { darkMode, toggleDarkMode } = useTheme();
 
   const navItems = [
     { href: "/", label: "Inicio" },
@@ -30,12 +32,21 @@ const NavBar = () => {
             key={item.href}
             href={item.href}
             className={pathname === item.href ? styles.active : ""}
-            onClick={() => setOpen(false)} // cierra menú al hacer clic
+            onClick={() => setOpen(false)}
           >
             {item.label}
           </Link>
         ))}
       </div>
+
+      {/* Botón de modo oscuro */}
+      <button
+        onClick={toggleDarkMode}
+        className={styles.themeToggle}
+        aria-label="Cambiar tema"
+      >
+        {darkMode ? "☀️" : "🌙"}
+      </button>
     </nav>
   );
 };
