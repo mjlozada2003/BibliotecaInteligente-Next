@@ -1,15 +1,16 @@
+// src/services/openLibraryService.ts
 import { Book, SearchParams } from '@/types';
 
 const OPEN_LIBRARY_SEARCH = 'https://openlibrary.org/search.json';
 const OPEN_LIBRARY_WORKS = 'https://openlibrary.org/works';
 
-/* Obtiene URL de portada (con placeholder por defecto) */
+/** Obtiene URL de portada (con placeholder por defecto) */
 export const getCoverUrl = (coverId?: number, size: 'S' | 'M' | 'L' = 'M'): string => {
-  if (!coverId) return '/placeholder-book.png';
+  if (!coverId) return '/placeholder-book.svg';
   return `https://covers.openlibrary.org/b/id/${coverId}-${size}.jpg`;
 };
 
-/* Busca libros usando la API de Open Library */
+/** Busca libros usando la API de Open Library */
 export const searchBooks = async (params: SearchParams): Promise<{ books: Book[]; total: number }> => {
   // Construir query principal
   let query = '';
@@ -18,12 +19,10 @@ export const searchBooks = async (params: SearchParams): Promise<{ books: Book[]
   } else {
     const parts: string[] = [];
     if (params.title) parts.push(`title:${encodeURIComponent(params.title)}`);
-    //if (params.author) parts.push(`author:${encodeURIComponent(params.author)}`);
-    //if (params.subject) parts.push(`subject:${encodeURIComponent(params.subject)}`);
+    if (params.author) parts.push(`author:${encodeURIComponent(params.author)}`);
+    if (params.subject) parts.push(`subject:${encodeURIComponent(params.subject)}`);
     query = parts.join(' AND ');
-    if (!query) {
-  throw new Error("Debes proporcionar al menos un criterio de búsqueda");
-}
+    if (!query) query = '*:*'; // fallback: devuelve todos los libros
   }
 
   // Filtros adicionales (año, idioma)
@@ -58,6 +57,7 @@ export const searchBooks = async (params: SearchParams): Promise<{ books: Book[]
   const limit = params.limit || 20;
   const offset = (page - 1) * limit;
 
+  // Construir URL
   const url = new URL(OPEN_LIBRARY_SEARCH);
   url.searchParams.set('q', query);
   if (sortParam) url.searchParams.set('sort', sortParam);
@@ -100,7 +100,7 @@ const getCoverFromSearch = async (workId: string): Promise<number | undefined> =
   }
 };
 
-/* Obtiene detalles completos de un libro (usando /works/{workId}.json) */
+/** Obtiene detalles completos de un libro (usando /works/{workId}.json) */
 export const getBookDetails = async (workId: string): Promise<Book | null> => {
   const url = `${OPEN_LIBRARY_WORKS}/${workId}.json`;
   const res = await fetch(url);
@@ -142,6 +142,7 @@ export const getBookDetails = async (workId: string): Promise<Book | null> => {
     if (yearMatch) firstPublishYear = parseInt(yearMatch[0]);
   }
 
+  // Número de ediciones
   const editionCount = data.edition_count;
 
   return {

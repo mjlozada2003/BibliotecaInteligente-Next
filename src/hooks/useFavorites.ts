@@ -1,29 +1,31 @@
 import {useState, useEffect} from 'react';
 import {getFavorites, addFavorite, removeFavorite, isFavorite, toggleFavorite} from '../utils/storage';
+import {Book} from '@/types';
 
 export const useFavorites = () => {
-    const [favoriteIds, setFavoriteIds] = useState<string[]>([]);
-    useEffect(() => {
-        setFavoriteIds(getFavorites());
-    }, []);
+  const [favoriteBooks, setFavoriteBooks] = useState<Book[]>([]);
 
-    const add = (workId: string) => {
-        addFavorite(workId);
-        setFavoriteIds(getFavorites());
-    };
+  useEffect(() => {
+    setFavoriteBooks(getFavorites());
+  }, []);
 
-    const remove = (workId: string) => {
-        removeFavorite(workId);
-        setFavoriteIds(getFavorites());
-    };
+  const add = (book: Book) => {
+    addFavorite(book);
+    setFavoriteBooks(getFavorites());
+  };
 
-    const toggle = (workId: string) => {
-        const result = toggleFavorite(workId);
-        setFavoriteIds(getFavorites());
-        return result;
-    };
+  const remove = (workId: string) => {
+    removeFavorite(workId);
+    setFavoriteBooks(getFavorites());
+  };
 
-    const isFav = (workId: string)=> favoriteIds.includes(workId);
+  const toggle = (book: Book) => {
+    const result = toggleFavorite(book);
+    setFavoriteBooks(getFavorites());
+    return result;
+  };
 
-    return {favoriteIds, add, remove, toggle, isFav};
- };
+  const isFav = (workId: string) => favoriteBooks.some(b => b.workId === workId);
+
+  return { favoriteBooks, add, remove, toggle, isFav };
+};

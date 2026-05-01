@@ -4,7 +4,7 @@ import { useSearchParams, useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 
 import { SearchResults } from "@/components/SearchResults/SearchResults";
-import SearchBar from "../searchBar/SearchBar";
+import SearchBar from "@/components/SearchBar/SearchBar";
 import AdvancedSearch from "@/components/AdvancedSearch/AdvancedSearch";
 import { parseSort } from "@/utils/searchHelpers";
 import Pagination from "@/components/Pagination/Pagination";

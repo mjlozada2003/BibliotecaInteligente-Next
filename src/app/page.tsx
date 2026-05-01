@@ -5,7 +5,9 @@ import styles from "./page.module.scss";
 import { Book } from "@/types";
 import { searchBooks } from "@/services/openLibraryService";   
 import { BookCard } from "@/components/BookCard/BookCard";
-import SearchBar from "./searchBar/SearchBar";
+import SearchBar from "@/components/SearchBar/SearchBar";
+import { useFavorites } from "@/hooks/useFavorites";
+import {useRouter} from "next/navigation";
 
 const FILTERS = [
   "programming",
@@ -15,30 +17,15 @@ const FILTERS = [
 ];
 
 const Home = () => {
+  const router = useRouter();
   const [books, setBooks] = useState<Book[]>([]);
-  const [favorites, setFavorites] = useState<string[]>([]);
+  const {toggle, isFav} = useFavorites();
   const [loading, setLoading] = useState(true);
   const [activeFilter, setActiveFilter] = useState("programming");
 
-  // 🔹 favoritos
-  const handleFavoriteToggle = (id: string) => {
-    setFavorites((prev) =>
-      prev.includes(id)
-        ? prev.filter((f) => f !== id)
-        : [...prev, id]
-    );
-  };
-
-  // 🔹 detalle
-  const handleViewDetail = (id: string) => {
-    console.log("Ver detalle:", id);
-  };
-
-  // 🔹 fetch centralizado
   const fetchBooks = async (query: string) => {
     setLoading(true);
     setActiveFilter(query);
-
     try {
       const { books } = await searchBooks({ q: query });
       setBooks(books);
@@ -50,41 +37,36 @@ const Home = () => {
     }
   };
 
-  // 🔹 carga inicial
   useEffect(() => {
     fetchBooks("programming");
   }, []);
 
+  const handleViewDetail = (workId: string) => {
+    router.push(`/bookDetail/${workId}`); // ✅ ruta en inglés
+  };
+
   return (
     <div className={styles.page}>
-      
-      {/* 🔵 HERO */}
       <div className={styles.hero}>
         <h1>Biblioteca Digital UCB</h1>
         <p>Explora millones de libros</p>
-
         <SearchBar onSearch={fetchBooks} />
       </div>
 
-      {/* 🎯 FILTROS */}
       <div className={styles.filters}>
         {FILTERS.map((filter) => (
           <button
             key={filter}
             onClick={() => fetchBooks(filter)}
-            className={
-              activeFilter === filter ? styles.activeFilter : ""
-            }
+            className={activeFilter === filter ? styles.activeFilter : ""}
           >
             {filter}
           </button>
         ))}
       </div>
 
-      {/* 📚 LIBROS */}
       <div className={styles.content}>
         <h2>Libros Populares</h2>
-
         {loading ? (
           <p>Cargando...</p>
         ) : (
@@ -93,8 +75,8 @@ const Home = () => {
               <BookCard
                 key={book.workId}
                 book={book}
-                isFavorite={favorites.includes(book.workId)}
-                onFavoriteToggle={handleFavoriteToggle}
+                isFavorite={isFav(book.workId)}
+                onFavoriteToggle={() => toggle(book)}
                 onViewDetail={handleViewDetail}
               />
             ))}

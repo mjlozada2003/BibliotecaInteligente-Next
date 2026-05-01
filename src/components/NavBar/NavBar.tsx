@@ -11,9 +11,9 @@ const NavBar = () => {
 
   const navItems = [
     { href: "/", label: "Inicio" },
-    { href: "/buscar", label: "Buscar" },
-    { href: "/favoritos", label: "Favoritos" },
-    { href: "/acerca", label: "Acerca" },
+    { href: "/search", label: "Buscar" },
+    { href: "/favorites", label: "Favoritos" },
+    { href: "/about", label: "Acerca" },
   ];
 
   return (

@@ -1,0 +1,5 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 150" width="100" height="150">
+  <rect width="100" height="150" fill="#f0f0f0" rx="4"/>
+  <text x="50" y="75" font-family="Arial, sans-serif" font-size="12" fill="#999" text-anchor="middle">📖</text>
+  <text x="50" y="95" font-family="Arial, sans-serif" font-size="10" fill="#aaa" text-anchor="middle">Sin portada</text>
+</svg>
