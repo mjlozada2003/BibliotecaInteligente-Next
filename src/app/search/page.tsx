@@ -9,6 +9,8 @@ import { Book } from "@/types";
 import { searchBooks } from "@/services/openLibraryService";
 import { useFavorites } from "@/hooks/useFavorites";
 import { useRouter } from "next/navigation";
+import { Loading } from "@/components/Loading/Loading";
+import { ErrorMessage } from "@/components/ErrorMessage/ErrorMessage";
 
 const SearchPage = () => {
   const router = useRouter();
@@ -18,9 +20,11 @@ const SearchPage = () => {
   const { toggle, isFav } = useFavorites();
   const [books, setBooks] = useState<Book[]>([]);
   const [loading, setLoading] = useState(false);
+  const [error, setError] = useState<Error | null>(null);
 
   const fetchBooks = async (params: any) => {
     setLoading(true);
+    setError(null);
     try {
       const { books } = await searchBooks(
         typeof params === "string" ? { q: params } : params
@@ -28,6 +32,7 @@ const SearchPage = () => {
       setBooks(books);
     } catch (err) {
       console.error("Error buscando libros:", err);
+      setError(err instanceof Error ? err : new Error("Error en la búsqueda"));
       setBooks([]);
     } finally {
       setLoading(false);
@@ -51,13 +56,13 @@ const SearchPage = () => {
       <SearchBar onSearch={fetchBooks} />
       <AdvancedSearch onSearch={fetchBooks} />
 
-      {loading ? (
-        <p>Cargando...</p>
-      ) : (
+      {loading && <Loading size="medium" text="Buscando libros..." />}
+      {error && <ErrorMessage onRetry={() => fetchBooks(query)} error={error} />}
+      {!loading && !error && (
         <SearchResults
           books={books}
-          onFavoriteToggle={toggle}        // ✅ Corrección: pasar toggle directamente
-          isFavorite={isFav}               // ✅ función que verifica favorito por workId
+          onFavoriteToggle={toggle}
+          isFavorite={isFav}
           onViewDetail={handleViewDetail}
         />
       )}
