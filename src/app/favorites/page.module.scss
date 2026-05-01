@@ -1,0 +1,64 @@
+// src/app/favoritos/page.module.scss
+
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 2rem 1.5rem;
+}
+
+.title {
+  font-size: 2rem;
+  font-weight: 700;
+  margin-bottom: 0.5rem;
+  color: var(--text-primary, #111);
+}
+
+.subtitle {
+  font-size: 1rem;
+  color: var(--text-secondary, #666);
+  margin-bottom: 2rem;
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 1.5rem;
+  margin-top: 1rem;
+}
+
+.empty {
+  text-align: center;
+  margin-top: 4rem;
+  padding: 3rem 1rem;
+  background: var(--surface, #f9f9f9);
+  border-radius: 16px;
+
+  p:first-child {
+    font-size: 1.2rem;
+    font-weight: 500;
+    margin-bottom: 0.5rem;
+    color: var(--text-primary, #111);
+  }
+
+  p:last-child {
+    font-size: 0.9rem;
+    color: var(--text-secondary, #666);
+  }
+}
+
+// Tablet
+@media (min-width: 640px) {
+  .grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+// Escritorio
+@media (min-width: 1024px) {
+  .grid {
+    grid-template-columns: repeat(4, 1fr);
+  }
+  .container {
+    padding: 2rem;
+  }
+}

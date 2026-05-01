@@ -1,5 +1,11 @@
 // NavBar.module.scss
 .navbar {
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  background: var(--surface, #fff);
+  border-bottom: 1px solid var(--border, #e0e0e0);
+  backdrop-filter: blur(8px); // efecto vidrio 
   display: flex;
   justify-content: space-between;
   align-items: center;

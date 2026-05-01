@@ -3,7 +3,7 @@
 import { useState } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import styles from "./Navbar.module.scss";
+import styles from "./NavBar.module.scss";
 
 const NavBar = () => {
   const [open, setOpen] = useState(false);

@@ -1,7 +1,7 @@
 import React from 'react';
 import {Book} from '../../types';
 import {getCoverUrl} from '../../services/openLibraryService';
-import styles from './BookCard.module.css';
+import styles from './BookCard.module.scss';
 
 interface BookCardProps {
     book: Book;
