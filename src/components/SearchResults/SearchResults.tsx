@@ -1,5 +1,7 @@
 import { Book } from "@/types";
-import {BookCard} from "../BookCard/BookCard";
+import { BookCard } from "../BookCard/BookCard";
+import styles from "./SearchResults.module.scss";
+
 interface SearchResultsProps {
   books: Book[];
   favorites: string[];
@@ -16,7 +18,7 @@ export const SearchResults = ({
   if (!books.length) return <p>No se encontraron resultados</p>;
 
   return (
-    <div>
+    <div className={styles.grid}> {/* 🔥 AQUÍ */}
       {books.map((book) => (
         <BookCard
           key={book.workId}

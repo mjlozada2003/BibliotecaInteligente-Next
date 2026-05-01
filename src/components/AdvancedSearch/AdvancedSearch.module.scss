@@ -1,0 +1,97 @@
+.container {
+  background: white;
+  padding: 20px;
+  border-radius: 12px;
+  margin-top: 20px;
+  width: 100%;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+}
+
+/* 🔍 GRID PRINCIPAL */
+.grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 16px;
+  margin-top: 10px;
+}
+
+.grid div {
+  display: flex;
+  flex-direction: column;
+}
+
+.container label {
+  font-size: 13px;
+  margin-bottom: 4px;
+  color: #555;
+}
+.container select {
+  padding: 10px;
+  border-radius: 8px;
+  border: 1px solid #ddd;
+  font-size: 14px;
+  width: 100%;
+}
+
+/* 🔽 TOGGLE */
+.toggle {
+  margin-top: 15px;
+  background: none;
+  border: none;
+  color: #2563eb;
+  cursor: pointer;
+  font-size: 14px;
+}
+
+/* 🎛️ FILTROS AVANZADOS */
+.filters {
+  margin-top: 15px;
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 12px;
+}
+
+/* 🔘 BOTONES */
+.actions {
+  margin-top: 20px;
+  display: flex;
+  gap: 10px;
+}
+
+.actions button {
+  flex: 1;
+  padding: 10px;
+  border-radius: 8px;
+  border: none;
+  cursor: pointer;
+  font-size: 14px;
+}
+
+.actions button:first-child {
+  background: #2563eb;
+  color: white;
+}
+
+.actions button:last-child {
+  background: #e5e7eb;
+}
+
+/* 📱 MOBILE */
+@media (max-width: 768px) {
+
+  .grid {
+    grid-template-columns: 1fr; // 🔥 1 columna
+  }
+
+  .filters {
+    grid-template-columns: 1fr; // 🔥 stack vertical
+  }
+
+  .actions {
+    flex-direction: column;
+  }
+
+  .actions button {
+    width: 100%;
+  }
+}

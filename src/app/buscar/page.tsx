@@ -1,11 +1,11 @@
 "use client";
-
 import { useSearchParams } from "next/navigation";
 import { useEffect, useState } from "react";
 import { SearchResults } from "@/components/SearchResults/SearchResults";
 import SearchBar from "../searchBar/SearchBar";
 import { Book } from "@/types";
 import { searchBooks } from "@/services/openLibraryService";
+import AdvancedSearch from "@/components/AdvancedSearch/AdvancedSearch";
 
 const BuscarPage = () => {
   const searchParams = useSearchParams();
@@ -15,7 +15,7 @@ const BuscarPage = () => {
   const [favorites, setFavorites] = useState<string[]>([]);
   const [loading, setLoading] = useState(false);
 
-  // 🔹 Manejar favoritos
+  //  Manejar favoritos
   const handleFavoriteToggle = (id: string) => {
     setFavorites((prev) =>
       prev.includes(id)
@@ -24,54 +24,59 @@ const BuscarPage = () => {
     );
   };
 
-  // 🔹 Ver detalle (por ahora simple)
+  //  Ver detalle (por ahora simple)
   const handleViewDetail = (id: string) => {
     console.log("Ver detalle:", id);
     // luego puedes hacer router.push(`/book/${id}`)
   };
 
-  // 🔹 Función reutilizable para buscar
-  const fetchBooks = async (q: string) => {
-    setLoading(true);
+  //  Función reutilizable para buscar
+  const fetchBooks = async (params: any) => {
+  setLoading(true);
 
-    try {
-      const { books } = await searchBooks({q});
-      setBooks(books);
-    } catch (err) {
-      console.error("Error buscando libros:", err);
-      setBooks([]);
-    } finally {
-      setLoading(false);
-    }
-  };
+  try {
+    const { books } = await searchBooks(
+      typeof params === "string" ? { q: params } : params
+    );
 
-  // 🔹 Ejecutar búsqueda cuando cambia la URL
+    setBooks(books);
+  } catch (err) {
+    console.error("Error buscando libros:", err);
+    setBooks([]);
+  } finally {
+    setLoading(false);
+  }
+};
+
+  // Ejecutar búsqueda cuando cambia la URL
   useEffect(() => {
     if (query) {
       fetchBooks(query);
     }
   }, [query]);
+return (
+  <div>
+    <h1>Resultados de búsqueda</h1>
 
-  return (
-    <div>
-      <h1>Resultados de búsqueda</h1>
+    {/* 🔍 búsqueda simple */}
+    <SearchBar onSearch={(q) => fetchBooks(q)} />
 
-      {/* 🔹 Barra de búsqueda */}
-      <SearchBar onSearch={fetchBooks} />
+    {/* 🔥 búsqueda avanzada */}
+    <AdvancedSearch onSearch={fetchBooks} />
 
-      {/* 🔹 Contenido */}
-      {loading ? (
-        <p>Cargando...</p>
-      ) : (
-        <SearchResults
-          books={books}
-          favorites={favorites}
-          onFavoriteToggle={handleFavoriteToggle}
-          onViewDetail={handleViewDetail}
-        />
-      )}
-    </div>
-  );
+    {/* 📚 resultados */}
+    {loading ? (
+      <p>Cargando...</p>
+    ) : (
+      <SearchResults
+        books={books}
+        favorites={favorites}
+        onFavoriteToggle={handleFavoriteToggle}
+        onViewDetail={handleViewDetail}
+      />
+    )}
+  </div>
+);
 };
 
 export default BuscarPage;
