@@ -10,6 +10,7 @@ import { useFavorites } from "@/hooks/useFavorites";
 import { useRouter } from "next/navigation";
 import { Loading } from "@/components/Loading/Loading";
 import { ErrorMessage } from "@/components/ErrorMessage/ErrorMessage";
+import { BookGrid } from "@/components/BookGrid/BookGrid";
 
 const FILTERS = [
   "programming",
@@ -46,8 +47,9 @@ const Home = () => {
     fetchBooks("programming");
   }, []);
 
-  const handleViewDetail = (workId: string) => {
-    router.push(`/bookDetail/${workId}`);
+  const handleViewDetail = (workId: string, coverId?: number) => {
+    const url = coverId ? `/bookDetail/${workId}?coverId=${coverId}` : `/bookDetail/${workId}`;
+  router.push(url);
   };
 
   // ⏳ Estado de carga
@@ -78,17 +80,13 @@ const Home = () => {
 
       <div className={styles.content}>
         <h2>Libros Populares</h2>
-        <div className={styles.grid}>
-          {books.map((book) => (
-            <BookCard
-              key={book.workId}
-              book={book}
-              isFavorite={isFav(book.workId)}
-              onFavoriteToggle={() => toggle(book)}
-              onViewDetail={handleViewDetail}
-            />
-          ))}
-        </div>
+        <BookGrid
+          books={books}
+          isLoading={loading}
+          isFavorite={isFav}
+          onFavoriteToggle={toggle}
+          onViewDetail={(workId) => handleViewDetail(workId, books.find(b => b.workId === workId)?.coverId)}
+        />
       </div>
     </div>
   );

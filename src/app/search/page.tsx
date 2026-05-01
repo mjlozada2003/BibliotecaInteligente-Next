@@ -45,8 +45,9 @@ const SearchPage = () => {
     }
   }, [query]);
 
-  const handleViewDetail = (workId: string) => {
-    router.push(`/bookDetail/${workId}`);
+  const handleViewDetail = (workId: string, coverId?: number) => {
+  const url = coverId ? `/bookDetail/${workId}?coverId=${coverId}` : `/bookDetail/${workId}`;
+  router.push(url);
   };
 
   return (

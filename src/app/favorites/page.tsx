@@ -44,13 +44,16 @@ export default function FavoritesPage() {
       <h1>❤️ Mis Favoritos</h1>
       <p>Libros guardados para consultar más tarde</p>
       <div className={styles.grid}>
-        {favoriteBooks.map(book => (
+       {favoriteBooks.map(book => (
           <BookCard
             key={book.workId}
             book={book}
             onFavoriteToggle={() => toggle(book)}
             isFavorite={isFav(book.workId)}
-            onViewDetail={(workId) => router.push(`/bookDetail/${workId}`)}
+            onViewDetail={(workId) => {
+              const url = book.coverId ? `/bookDetail/${workId}?coverId=${book.coverId}` : `/bookDetail/${workId}`;
+              router.push(url);
+            }}
           />
         ))}
       </div>
