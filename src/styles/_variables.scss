@@ -1,0 +1,14 @@
+// src/styles/_variables.scss
+
+// Breakpoints (mobile first)
+$breakpoint-sm: 576px;
+$breakpoint-md: 768px;
+$breakpoint-lg: 992px;
+$breakpoint-xl: 1200px;
+
+// Mixin para media queries (uso opcional, puedes usarlo en otros módulos)
+@mixin respond($breakpoint) {
+  @media (min-width: $breakpoint) {
+    @content;
+  }
+}
