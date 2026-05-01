@@ -1,0 +1,127 @@
+.container {
+  max-width: 1000px;
+  margin: 40px auto;
+  padding: 20px;
+
+  display: flex;
+  gap: 30px;
+
+  background: #ffffff;
+  border-radius: 12px;
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.05);
+}
+
+/* 📚 IMAGEN */
+.cover {
+  width: 220px;
+  height: 320px;
+  object-fit: cover;
+  border-radius: 10px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+/* 📝 INFO */
+.info {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+/* 🔥 TÍTULO */
+.title {
+  font-size: 28px;
+  font-weight: 700;
+  margin-bottom: 10px;
+  color: #111;
+}
+
+/* ✍️ AUTORES */
+.authors {
+  font-size: 16px;
+  color: #555;
+  margin-bottom: 10px;
+}
+
+/* 📅 AÑO */
+.year {
+  font-size: 14px;
+  color: #777;
+  margin-bottom: 20px;
+}
+
+/* 📖 DESCRIPCIÓN */
+.description {
+  font-size: 15px;
+  line-height: 1.6;
+  color: #333;
+  margin-bottom: 20px;
+}
+
+/* 🏷️ TEMAS */
+.subjects {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-bottom: 20px;
+}
+
+.tag {
+  background: #f1f5f9;
+  padding: 6px 10px;
+  border-radius: 999px;
+  font-size: 12px;
+  color: #333;
+}
+
+/* 🔗 LINK */
+.link {
+  display: inline-block;
+  margin-top: auto;
+  padding: 10px 16px;
+  border-radius: 8px;
+  background: #2563eb;
+  color: rgb(22, 20, 20);
+  text-decoration: none;
+  font-size: 14px;
+  width: fit-content;
+  transition: 0.2s;
+}
+
+.link:hover {
+  background: #1d4ed8;
+}
+
+/* 📱 RESPONSIVE */
+@media (max-width: 768px) {
+  .container {
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+  }
+
+  .cover {
+    width: 180px;
+    height: 260px;
+  }
+
+  .info {
+    align-items: center;
+  }
+
+  .subjects {
+    justify-content: center;
+  }
+}.backButton {
+  padding: 10px 16px;
+  border-radius: 8px;
+  border: 1px solid #ddd;
+  background: white;
+  cursor: pointer;
+  font-size: 14px;
+  transition: 0.2s;
+  color: #333;
+}
+
+.backButton:hover {
+  background: #f3f4f6;
+}

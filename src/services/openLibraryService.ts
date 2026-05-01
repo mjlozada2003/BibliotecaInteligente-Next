@@ -82,11 +82,29 @@ export const searchBooks = async (params: SearchParams): Promise<{ books: Book[]
 
   return { books, total: data.num_found || 0 };
 };
+const getCoverFromSearch = async (workId: string): Promise<number | undefined> => {
+  try {
+    const url = new URL(OPEN_LIBRARY_SEARCH);
+    url.searchParams.set("q", `key:/works/${workId}`);
+    url.searchParams.set("limit", "1");
+
+    const res = await fetch(url.toString());
+    if (!res.ok) return undefined;
+
+    const data = await res.json();
+
+    return data.docs?.[0]?.cover_i;
+  } catch (error) {
+    console.error("Error obteniendo cover:", error);
+    return undefined;
+  }
+};
 
 /* Obtiene detalles completos de un libro (usando /works/{workId}.json) */
 export const getBookDetails = async (workId: string): Promise<Book | null> => {
   const url = `${OPEN_LIBRARY_WORKS}/${workId}.json`;
   const res = await fetch(url);
+
   if (!res.ok) {
     if (res.status === 404) return null;
     throw new Error(`Error obteniendo detalle: ${res.statusText}`);
@@ -94,18 +112,21 @@ export const getBookDetails = async (workId: string): Promise<Book | null> => {
 
   const data = await res.json();
 
-  // Descripción (puede ser string u objeto)
+  //  OBTENER COVER DESDE SEARCH
+  const coverId = await getCoverFromSearch(workId);
+
   let description = '';
   if (data.description) {
-    description = typeof data.description === 'string'
-      ? data.description
-      : data.description.value || '';
+    description =
+      typeof data.description === 'string'
+        ? data.description
+        : data.description.value || '';
   }
 
-  // Temas / subjects
-  const subjects: string[] = Array.isArray(data.subjects) ? data.subjects : [];
+  const subjects: string[] = Array.isArray(data.subjects)
+    ? data.subjects
+    : [];
 
-  // Autores: puede venir como array de objetos { author: { name } } o directamente nombres
   let authors: string[] = [];
   if (Array.isArray(data.authors)) {
     authors = data.authors.map((a: any) => {
@@ -115,14 +136,12 @@ export const getBookDetails = async (workId: string): Promise<Book | null> => {
     });
   }
 
-  // Año de primera publicación
   let firstPublishYear: number | undefined;
   if (data.first_publish_date) {
     const yearMatch = data.first_publish_date.match(/\d{4}/);
     if (yearMatch) firstPublishYear = parseInt(yearMatch[0]);
   }
 
-  // Número de ediciones (campo opcional)
   const editionCount = data.edition_count;
 
   return {
@@ -133,7 +152,7 @@ export const getBookDetails = async (workId: string): Promise<Book | null> => {
     editionCount,
     description,
     subjects,
+    coverId, // 🔥 AHORA SÍ TIENES COVER
     openLibraryUrl: `https://openlibrary.org/works/${workId}`,
-    // coverId no viene en este endpoint; se debería obtener de la búsqueda previa
   };
 };
