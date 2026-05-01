@@ -4,14 +4,14 @@ import styles from "./SearchResults.module.scss";
 
 interface SearchResultsProps {
   books: Book[];
-  favorites: string[];
-  onFavoriteToggle: (id: string) => void;
-  onViewDetail: (id: string) => void;
+  isFavorite: (workId: string) => boolean;
+  onFavoriteToggle: (book: Book) => void;
+  onViewDetail: (workId: string) => void;
 }
 
 export const SearchResults = ({
   books,
-  favorites,
+  isFavorite,
   onFavoriteToggle,
   onViewDetail,
 }: SearchResultsProps) => {
@@ -23,8 +23,8 @@ export const SearchResults = ({
         <BookCard
           key={book.workId}
           book={book}
-          isFavorite={favorites.includes(book.workId)}
-          onFavoriteToggle={onFavoriteToggle}
+          isFavorite={isFavorite(book.workId)}
+          onFavoriteToggle={() => onFavoriteToggle(book)}
           onViewDetail={onViewDetail}
         />
       ))}

@@ -1,29 +1,32 @@
+// src/components/BookCard/BookCard.tsx
 import React from 'react';
-import {Book} from '../../types';
-import {getCoverUrl} from '../../services/openLibraryService';
 import styles from './BookCard.module.scss';
+import { Book } from '@/types';
+import { getCoverUrl } from '@/services/openLibraryService';
 
 interface BookCardProps {
-    book: Book;
-    onFavoriteToggle: (workId: string) => void;
-    isFavorite: boolean;
-    onViewDetail: (workId: string) => void;
+  book: Book;
+  onFavoriteToggle: (book: Book) => void;
+  isFavorite: boolean;
+  onViewDetail: (workId: string) => void;
 }
 
 export const BookCard: React.FC<BookCardProps> = ({
-    book, 
-    onFavoriteToggle, 
-    isFavorite, 
-    onViewDetail,
+  book,
+  onFavoriteToggle,
+  isFavorite,
+  onViewDetail,
 }) => {
-    const coverUrl = getCoverUrl(book.coverId, 'M');
+  // ✅ Aseguramos que authors sea siempre un array
+  const authors = Array.isArray(book.authors) ? book.authors : ['Autor desconocido'];
+  const coverUrl = getCoverUrl(book.coverId, 'M');
 
-    return (
-        <div className={styles.card}>
+  return (
+    <div className={styles.card}>
       <img src={coverUrl} alt={book.title} className={styles.cover} />
       <div className={styles.content}>
-        <h3 className={styles.title}>{book.title}</h3>
-        <div className={styles.author}>{book.authors.join(', ')}</div>
+        <h3 className={styles.title}>{book.title || 'Sin título'}</h3>
+        <div className={styles.author}>{authors.join(', ')}</div>
         {book.firstPublishYear && (
           <div className={styles.year}>Año: {book.firstPublishYear}</div>
         )}
@@ -39,12 +42,12 @@ export const BookCard: React.FC<BookCardProps> = ({
           </button>
           <button
             className={`${styles.button} ${styles['button--secondary']}`}
-            onClick={() => onFavoriteToggle(book.workId)}
+            onClick={() => onFavoriteToggle(book)}
           >
             {isFavorite ? '❤️ Favorito' : '🤍 Agregar'}
           </button>
         </div>
       </div>
     </div>
-    );
+  );
 };
