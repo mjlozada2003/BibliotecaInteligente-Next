@@ -77,7 +77,7 @@ const BuscarPage = () => {
         : undefined,
       language: searchParams.get("language") || undefined,
       sort: parseSort(searchParams.get("sort")),
-       page: searchParams.get("page")
+        page: searchParams.get("page")
       ? Number(searchParams.get("page"))
       : 1,
     };

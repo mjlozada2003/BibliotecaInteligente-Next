@@ -1,3 +1,5 @@
+import styles from "./Pagination.module.scss";
+
 interface Props {
   page: number;
   onChange: (page: number) => void;
@@ -5,17 +7,25 @@ interface Props {
 
 const Pagination = ({ page, onChange }: Props) => {
   return (
-    <div style={{ marginTop: "20px", display: "flex", gap: "10px" }}>
+    <div className={styles.pagination}>
       <button
-        onClick={() => onChange(page - 1)}
+        aria-label="Página anterior"
+        className={`${styles.button} ${page <= 1 ? styles.disabled : ""}`}
+        onClick={() => page > 1 && onChange(page - 1)}
         disabled={page <= 1}
       >
         ← Anterior
       </button>
 
-      <span>Página {page}</span>
+      <span className={styles.pageInfo}>
+        Página {page}
+      </span>
 
-      <button onClick={() => onChange(page + 1)}>
+      <button
+        aria-label="Página siguiente"
+        className={styles.button}
+        onClick={() => onChange(page + 1)}
+      >
         Siguiente →
       </button>
     </div>
