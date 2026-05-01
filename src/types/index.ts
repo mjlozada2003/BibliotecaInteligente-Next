@@ -1,10 +1,10 @@
 export interface Book{
-    workID: string;
+    workId: string;
     title: string;
     authors: string[];
     firstPublishYear?: number;
     editionCount?: number;
-    coverID?: number; // ID para obtener la portada del libro
+    coverId?: number; // ID para obtener la portada del libro
     description?: string;
     subjects?: string[]; // Temas relacionados con el libro
     openLibraryUrl?: string; //enlace a la página del libro en Open Library
