@@ -18,10 +18,12 @@ export const searchBooks = async (params: SearchParams): Promise<{ books: Book[]
   } else {
     const parts: string[] = [];
     if (params.title) parts.push(`title:${encodeURIComponent(params.title)}`);
-    if (params.author) parts.push(`author:${encodeURIComponent(params.author)}`);
-    if (params.subject) parts.push(`subject:${encodeURIComponent(params.subject)}`);
+    //if (params.author) parts.push(`author:${encodeURIComponent(params.author)}`);
+    //if (params.subject) parts.push(`subject:${encodeURIComponent(params.subject)}`);
     query = parts.join(' AND ');
-    if (!query) query = '*:*';
+    if (!query) {
+  throw new Error("Debes proporcionar al menos un criterio de búsqueda");
+}
   }
 
   // Filtros adicionales (año, idioma)
