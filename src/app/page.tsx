@@ -1,66 +1,108 @@
-import Image from "next/image";
-import styles from "./page.module.scss";
+"use client";
 
-export default function Home() {
+import { useEffect, useState } from "react";
+import styles from "./page.module.scss";
+import { Book } from "@/types";
+import { searchBooks } from "@/services/openLibraryService";   
+import { BookCard } from "@/components/BookCard/BookCard";
+import SearchBar from "./searchBar/SearchBar";
+
+const FILTERS = [
+  "programming",
+  "javascript",
+  "database",
+  "software engineering",
+];
+
+const Home = () => {
+  const [books, setBooks] = useState<Book[]>([]);
+  const [favorites, setFavorites] = useState<string[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [activeFilter, setActiveFilter] = useState("programming");
+
+  // 🔹 favoritos
+  const handleFavoriteToggle = (id: string) => {
+    setFavorites((prev) =>
+      prev.includes(id)
+        ? prev.filter((f) => f !== id)
+        : [...prev, id]
+    );
+  };
+
+  // 🔹 detalle
+  const handleViewDetail = (id: string) => {
+    console.log("Ver detalle:", id);
+  };
+
+  // 🔹 fetch centralizado
+  const fetchBooks = async (query: string) => {
+    setLoading(true);
+    setActiveFilter(query);
+
+    try {
+      const { books } = await searchBooks({ q: query });
+      setBooks(books);
+    } catch (err) {
+      console.error("Error:", err);
+      setBooks([]);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  // 🔹 carga inicial
+  useEffect(() => {
+    fetchBooks("programming");
+  }, []);
+
   return (
     <div className={styles.page}>
-      <main className={styles.main}>
-        <Image
-          className={styles.logo}
-          src="/next.svg"
-          alt="Next.js logo"
-          width={100}
-          height={20}
-          priority
-        />
-        <div className={styles.intro}>
-          <h1>To get started, edit the page.tsx file.</h1>
-          <p>
-            Looking for a starting point or more instructions? Head over to{" "}
-            <a
-              href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              Templates
-            </a>{" "}
-            or the{" "}
-            <a
-              href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              Learning
-            </a>{" "}
-            center.
-          </p>
-        </div>
-        <div className={styles.ctas}>
-          <a
-            className={styles.primary}
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
+      
+      {/* 🔵 HERO */}
+      <div className={styles.hero}>
+        <h1>Biblioteca Digital UCB</h1>
+        <p>Explora millones de libros</p>
+
+        <SearchBar onSearch={fetchBooks} />
+      </div>
+
+      {/* 🎯 FILTROS */}
+      <div className={styles.filters}>
+        {FILTERS.map((filter) => (
+          <button
+            key={filter}
+            onClick={() => fetchBooks(filter)}
+            className={
+              activeFilter === filter ? styles.activeFilter : ""
+            }
           >
-            <Image
-              className={styles.logo}
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={16}
-              height={16}
-            />
-            Deploy Now
-          </a>
-          <a
-            className={styles.secondary}
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Documentation
-          </a>
-        </div>
-      </main>
+            {filter}
+          </button>
+        ))}
+      </div>
+
+      {/* 📚 LIBROS */}
+      <div className={styles.content}>
+        <h2>Libros Populares</h2>
+
+        {loading ? (
+          <p>Cargando...</p>
+        ) : (
+          <div className={styles.grid}>
+            {books.map((book) => (
+              <BookCard
+                key={book.workId}
+                book={book}
+                isFavorite={favorites.includes(book.workId)}
+                onFavoriteToggle={handleFavoriteToggle}
+                onViewDetail={handleViewDetail}
+              />
+            ))}
+          </div>
+        )}
+      </div>
     </div>
   );
-}
+};
+
+export default Home;

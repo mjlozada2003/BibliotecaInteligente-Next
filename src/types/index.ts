@@ -23,7 +23,16 @@ export interface SearchParams {
     limit?: number; // número de resultados por página
 }
 
-export interface SearchResponse{
-    docs: any[]; // resultados de la búsqueda
-    total: number; // total de resultados encontrados
+export interface OpenLibraryDoc {
+  key: string;
+  title: string;
+  author_name?: string[];
+  first_publish_year?: number;
+  edition_count?: number;
+  cover_i?: number;
+}
+
+export interface SearchResponse {
+  docs: OpenLibraryDoc[];
+  numFound: number;
 }

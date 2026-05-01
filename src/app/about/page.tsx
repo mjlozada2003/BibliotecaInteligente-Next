@@ -28,7 +28,7 @@ export default function AboutPage() {
               <li>React 18</li>
               <li>React Router v7</li>
               <li>TypeScript</li>
-              <li>Tailwind CSS</li>
+              <li>SCSS</li>
               <li>Lucide Icons</li>
             </ul>
           </div>
